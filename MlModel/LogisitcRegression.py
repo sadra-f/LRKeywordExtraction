@@ -8,7 +8,7 @@ class LogisticRegression:
     def fit(self, data):
         self._initiate_weights()
         for i in range(self.steps):
-            results = self._sigmoid(np.multiply(data), self.weights)
+            results = self._sigmoid(np.multiply(data, self.weights))
     def _initiate_weights(self):
         self.weights = np.random.random_sample()
     def predict(self, data):
