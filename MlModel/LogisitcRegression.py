@@ -11,13 +11,23 @@ class LogisticRegression:
         self.learning_rate = learning_rate
         self.keep_loss_hist = keep_loss_hist
         self.loss_hist = []
+        self._ref_vals = None
 
-    def _standardize(self, data):
-        return (data - np.mean(data, axis=0)) / np.std(data, axis=0), np.mean(data, axis=0), np.std(data, axis=0)
-    # TODO L fix standardization zero division
-    def fit(self, X, Y):
+    def _standardize(self, data, exclude):
+        ref_vals = []
+        for i in range(len(data[0])):
+            if i in exclude:
+                ref_vals.append((i, None, None))
+            else:
+                ref_vals.append((i, np.mean(data[:, i], axis=0), np.std(data[:, i], axis=0)))
+                data[:,i] =  (data[:, i] - ref_vals[i][1]) / ref_vals[i][2]
+        return data, ref_vals
+    def fit(self, X, Y, standardization:bool=True, onehot_col_index:list[int]=None):
         Y = np.array(self._Check_binary_classes(Y))
-        X, self.X_mean, self.X_std = self._standardize(np.array(X))
+        if standardization:
+            X, self._ref_vals = self._standardize(np.array(X), onehot_col_index)
+        else:
+            X = np.array(X)
 
         self._initiate_weights(len(X[0]))
 
@@ -38,12 +48,24 @@ class LogisticRegression:
     def _initiate_weights(self, size):
         self.weights = np.random.random_sample(size)
 
+    def _apply_standardization(self, data):
+        if self._ref_vals is None:
+            raise Exception("Standardization was not set for this object")
+        data = np.array(data)
+        for i, mean, std in self._ref_vals:
+            if mean != None:
+                data[:, i] = (data[:, i] - mean) / std
+        return data
+
     def predict(self, X):
-        X = (X - self.X_mean) / self.X_std
-        self._sigmoid(np.sum(np.multiply(X, self.weights), axis=1))
+        if self._ref_vals != None:
+            X = self._apply_standardization(X)
+        predicts = self._sigmoid(np.sum(np.multiply(X, self.weights), axis=1))
+        return predicts > 0.5
+        
 
     def save_model(self, path="log/LR_model.pkl"):
-        value = {"X_MEAN":self.X_mean, "X_STD":self.X_std, "W":self.weights}
+        value = {"ref_vals":self._ref_vals, "W":self.weights}
         with open(path, "wb") as f:
             pkl.dump(value, f)
     
@@ -51,9 +73,8 @@ class LogisticRegression:
         value = None
         with open(path, "rb") as f:
             value = pkl.load(f)
-        self.X_std = value["X_STD"]
+        self._ref_vals = value["ref_vals"]
         self.weights = value["W"]
-        self.X_mean = value["X_MEAN"]
 
     def _sigmoid(self, data):
         return 1 / (1 + np.exp(-data))
