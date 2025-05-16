@@ -5,7 +5,7 @@ POS_TAG_REF = ['CC', 'CD', 'DT', 'EX', 'FW', 'IN','JJ' ,'JJR', 'JJS', 'MD', 'NN'
                'PDT', 'POS', 'PRP', 'PRP$', 'RB', 'RBR', 'RBS', 'RP', 'SYM', 'TO', 'UH', 'VB', 'VBD', 
                'VBG', 'VBN', 'VBP', 'VBZ', 'WDT', 'WP', 'WP$', 'WRB']
 
-def pos_tag(docs:list[str], stopwords=None):
+def pos_tag(docs:list[str]):
     """returns the POS tagged documents, removes stopwords after tagging if a list of stopwords is provided
 
     Args:
