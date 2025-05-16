@@ -11,6 +11,7 @@ class LogisticRegression:
         self.learning_rate = learning_rate
         self.keep_loss_hist = keep_loss_hist
         self.loss_hist = []
+        self._loss_rec_steps = 100
         self._ref_vals = None
 
     def _standardize(self, data, exclude):
@@ -35,13 +36,17 @@ class LogisticRegression:
             predictions = self._sigmoid(np.sum(np.multiply(X, self.weights), axis=1))
             loss = -(Y * np.log(predictions) + (1 - Y) * np.log(1 - predictions))
             tloss = np.sum(loss)
-            if self.keep_loss_hist and i%100 == 0:
+            if self.keep_loss_hist and i%self._loss_rec_steps == 0:
                 self.loss_hist.append(tloss)
 
             self.weights = self.weights - (self.learning_rate / len(X)) * np.dot(X.T, (predictions - Y))
         if self.loss_hist:
             pyplot.figure()
-            pyplot.plot([i for i in range(len(self.loss_hist))], self.loss_hist)
+            pyplot.plot([i*self._loss_rec_steps for i in range(len(self.loss_hist))], self.loss_hist)
+            pyplot.ylabel("Loss Value")
+            pyplot.xlabel("epochs")
+            pyplot.title("Loss over epochs")
+
         
         return
 
