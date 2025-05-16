@@ -2,7 +2,25 @@ import os
 import numpy as np
 import pickle as pkl
 from pathlib import Path
-from Models.TextKeyPair import TextKeyPair
+import re
+from FeatureExtraction.stopwords import STOP_WORDS
+
+class TextKeyPair:
+    def __init__(self, txt_path, key_path, txt, keys):
+        self.txt_path = txt_path
+        self.key_path = key_path
+        if self.txt_path.name.split('.')[0] != self.key_path.name.split('.')[0]:
+            raise ValueError("Text and Key Values are not from the same reference number.")
+        self.id = txt_path.name.split(".")[0]
+        self.txt = txt
+        self.keys = []
+        keys = re.split("\\n|,| ", keys)
+        for key in keys:
+            if key.strip() in txt and key.strip() != '' and key.lower().strip() not in STOP_WORDS:
+                self.keys.append(key.strip())
+
+    def __repr__(self):
+        return f"{self.id}"
 
 class Read:
     def __init__(self):
