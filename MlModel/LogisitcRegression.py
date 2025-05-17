@@ -66,7 +66,7 @@ class LogisticRegression:
         if self._ref_vals != None:
             X = self._apply_standardization(X)
         predicts = self._sigmoid(np.sum(np.multiply(X, self.weights), axis=1))
-        return predicts > 0.5
+        return predicts > 0.6
         
 
     def save_model(self, path="log/LR_model.pkl"):
