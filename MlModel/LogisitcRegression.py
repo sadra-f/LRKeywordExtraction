@@ -40,7 +40,7 @@ class LogisticRegression:
                 self.loss_hist.append(tloss)
 
             self.weights = self.weights - (self.learning_rate / len(X)) * np.dot(X.T, (predictions - Y))
-        if self.loss_hist:
+        if self.keep_loss_hist:
             pyplot.figure()
             pyplot.plot([i*self._loss_rec_steps for i in range(len(self.loss_hist))], self.loss_hist)
             pyplot.ylabel("Loss Value")
