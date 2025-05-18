@@ -4,7 +4,7 @@ from FeatureExtraction.TFIDF import TFIDF
 import pickle as pkl
 import numpy as np
 
-# This is honestly a mess it essentially extracts required features from the input text to be used in the logistic regression model
+"""  This is honestly a mess it essentially extracts required features from the input text to be used in the logistic regression model  """
 
 def text_to_numerical(txt):
     def nth_acc_term(index, n):
