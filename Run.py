@@ -10,7 +10,7 @@ inp_files = ["test_input.txt", "test_input copy.txt"]
 for file in inp_files:
 
     lr = LR()
-    lr.load_weights()
+    lr.load_model()
 
     with open(file, "r") as f:
         inp_str = f.read()

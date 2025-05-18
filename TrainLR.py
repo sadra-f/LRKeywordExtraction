@@ -24,7 +24,7 @@ lr = LR()
 lr.fit(X_train, Y_train, onehot_col_index=[i for i in range(13, 48, 1)])
 lr.save_model()
 
-lr.load_weights()
+lr.load_model()
 Y_predict = lr.predict(X_test)
 
 print(ec(Y_predict, Y_test))
