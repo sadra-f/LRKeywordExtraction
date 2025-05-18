@@ -15,6 +15,16 @@ class LogisticRegression:
         self._ref_vals = None
 
     def _standardize(self, data, exclude):
+        """Applies Standarization to the data
+
+        Args:
+            data (_type_): data to standarize
+            exclude (_type_): columns to exclude from standardization
+
+        Returns:
+            list[list], dict: returns the standarized dataset along mean and std for 
+            each column to be applied to prediction data as to fit well to the weights
+        """
         ref_vals = []
         for i in range(len(data[0])):
             if i in exclude:
@@ -23,7 +33,16 @@ class LogisticRegression:
                 ref_vals.append((i, np.mean(data[:, i], axis=0), np.std(data[:, i], axis=0)))
                 data[:,i] =  (data[:, i] - ref_vals[i][1]) / ref_vals[i][2]
         return data, ref_vals
+    
     def fit(self, X, Y, standardization:bool=True, onehot_col_index:list[int]=None):
+        """Fits the model weightd to the input data
+
+        Args:
+            X (_type_): Input feature vectors
+            Y (_type_): input class vector
+            standardization (bool, optional): If applying standardization is required. Defaults to True.
+            onehot_col_index (list[int], optional): Index of one-hot encoded columns as to not apply standardization to them. Defaults to None.
+        """
         Y = np.array(self._Check_binary_classes(Y))
         if standardization:
             X, self._ref_vals = self._standardize(np.array(X), onehot_col_index)
@@ -54,6 +73,17 @@ class LogisticRegression:
         self.weights = np.random.random_sample(size)
 
     def _apply_standardization(self, data):
+        """Applies existing mean and std values to new data
+
+        Args:
+            data (_type_): input dataset
+
+        Raises:
+            Exception: if no logged mean and std values exist
+
+        Returns:
+            _type_: standardized dataset
+        """
         if self._ref_vals is None:
             raise Exception("Standardization was not set for this object")
         data = np.array(data)
@@ -74,7 +104,7 @@ class LogisticRegression:
         with open(path, "wb") as f:
             pkl.dump(value, f)
     
-    def load_weights(self, path="log/LR_model.pkl"):
+    def load_model(self, path="log/LR_model.pkl"):
         value = None
         with open(path, "rb") as f:
             value = pkl.load(f)
