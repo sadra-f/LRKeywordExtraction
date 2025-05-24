@@ -23,6 +23,7 @@ Although the LR model shows an acceptable performance:
 |Accuracy|Precision|Recall|F1-score|
 |--------|---------|------|--------|
 |0.705|0.715|0.705|0.703|
+
 The performance for the general approach though, is not as accaptable in comparison to keywords extarcted by KeyBERT model and the ground truth. Our custom keyword extractor has a lower cosine similarity for the embeddings of the sentenceTransformers library.
 - Cosine Similarity of **Custom and BERT keywords** :  **0.119**
 - Cosine Similarity of **ground truth and BERT keywords** :  **0.605**
