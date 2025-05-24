@@ -1,0 +1,34 @@
+# Description
+In an attempt to better understand and learn Logistic (LR) Regression I decided to generate a solution for keyword extraction using LR.
+
+## Dataset
+In a separate Project the basic NLP features of a textual dataset [(NLM_500)](https://github.com/zelandiya/keyword-extraction-datasets) were extracted for each keyword and approximatly the same amount of non-keywords.
+The resulted structural numerical dataset with ~9k records is available in [this repo](/dataset/numerical_dataset.csv).
+Dataset columns are as provided below:
+|#|word|TFIDF_prev2|TFIDF_prev1|TFIDF|TFIDF_next1|TFIDF_next2|TF_prev_2|TF_prev_1|TF|TF_next_1|TF_next_2|First_occurrence|last_occurrence|length|...|(is)keyword|
+|-|----|-----------|-----------|-----|-----------|-----------|---------|---------|--|---------|---------|----------------|---------------|---|-|-|
+
+The 3 dots represents the one-hot encoded part-of-Speech tag of the word.
+the list of POS tags used is provided below (using NLTK based on [Penn Treebak project](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html)):
+[CC,CD,DT,EX,FW,IN,JJ,JJR,JJS,MD,NN,NNP,NNPS,NNS,PDT,POS,PRP,PRP$,RB,RBR,RBS,RP,SYM,TO,UH,VB,VBD,VBG,VBN,VBP,VBZ,WDT,WP,WP$,WRB]
+
+## Keyword Extraction Process
+1. We Start by training the LR model on the existing dataset.
+2. Then every feature existing in the dataset [TFIDF, TF,...] is extarcted for each word within the input.
+3. Trained LR model predicts the probability of each word being a keyword.
+4. Outputs larger than a set threshold are presented as keywords from the input text.
+
+## Performance Evaluation
+Although the LR model shows an acceptable performance:
+|Accuracy|Precision|Recall|F1-score|
+|--------|---------|------|--------|
+|0.705|0.715|0.705|0.703|
+The performance for the general approach though, is not as accaptable in comparison to keywords extarcted by KeyBERT model and the ground truth. Our custom keyword extractor has a lower cosine similarity for the embeddings of the sentenceTransformers library.
+- Cosine Similarity of **Custom and BERT keywords** :  **0.119**
+- Cosine Similarity of **ground truth and BERT keywords** :  **0.605**
+- Cosine Similarity of **Custom and ground truth keywords** :  **0.129**
+
+\
+\
+\
+If you are more experienced in this topic or have an idea you think can enhance the performance I would appreciate you sharing it with me.
