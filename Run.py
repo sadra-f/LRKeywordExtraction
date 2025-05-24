@@ -28,11 +28,17 @@ for file in inp_files:
     keyword_predictions = features[predictions][:,0]
     # put predicted words in a sentence together
     predict_key_sent = " ".join(keyword_predictions)
+    #Load ground_truth keywords
+    with open("test_ouput_keys.txt") as f:
+        inp_gt = f.read()
+    
     # Generate BERT embeddings from Custom and KeyBERT keywords
-    embeddings = sb([KBERT_key_sent, predict_key_sent])
+    embeddings = sb([KBERT_key_sent, predict_key_sent, inp_gt])
     # Print results
     print("\t- KeyBERT Predicted Keywords :\r\n", KBERT_key_sent, "\r\n")
     print("\t- Custom Predicted Keywords :\r\n", predict_key_sent)
-    print("- Cosine Similarity of Custom and BERT Ceyword Predictions : ", cosine_similarity(embeddings[0], embeddings[1]))
+    print("- Cosine Similarity of Custom and BERT keywords : ", cosine_similarity(embeddings[0], embeddings[1]))
+    print("- Cosine Similarity of ground_truth and BERT keywords : ", cosine_similarity(embeddings[0], embeddings[2]))
+    print("- Cosine Similarity of Custom and ground_truth keywords : ", cosine_similarity(embeddings[1], embeddings[2]))
 
 print()
