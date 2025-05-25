@@ -52,13 +52,14 @@ class LogisticRegression:
         self._initiate_weights(len(X[0]))
 
         for i in range(self.epochs):
-            predictions = self._sigmoid(np.sum(np.multiply(X, self.weights), axis=1))
+            predictions = self._sigmoid(np.dot(X, self.weights[1:]) + self.weights[0])
             loss = -(Y * np.log(predictions) + (1 - Y) * np.log(1 - predictions))
             tloss = np.sum(loss)
             if self.keep_loss_hist and i%self._loss_rec_steps == 0:
                 self.loss_hist.append(tloss)
 
-            self.weights = self.weights - (self.learning_rate / len(X)) * np.dot(X.T, (predictions - Y))
+            self.weights[1:] = self.weights[1:] - (self.learning_rate / len(X)) * np.dot(X.T, (predictions - Y))
+            self.weights[0] = self.weights[0] - (self.learning_rate / len(X)) * np.sum((predictions - Y))
         if self.keep_loss_hist:
             pyplot.figure()
             pyplot.plot([i*self._loss_rec_steps for i in range(len(self.loss_hist))], self.loss_hist)
@@ -70,7 +71,8 @@ class LogisticRegression:
         return
 
     def _initiate_weights(self, size):
-        self.weights = np.random.random_sample(size)
+        # +1 for the bias
+        self.weights = np.random.random_sample(size + 1)
 
     def _apply_standardization(self, data):
         """Applies existing mean and std values to new data
@@ -95,7 +97,7 @@ class LogisticRegression:
     def predict(self, X):
         if self._ref_vals != None:
             X = self._apply_standardization(X)
-        predicts = self._sigmoid(np.sum(np.multiply(X, self.weights), axis=1))
+        predicts = self._sigmoid(np.dot(X, self.weights[1:]) + self.weights[0])
         return predicts > 0.6
         
 
