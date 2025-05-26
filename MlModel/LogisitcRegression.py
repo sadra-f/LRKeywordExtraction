@@ -64,8 +64,8 @@ class LogisticRegression:
             pyplot.figure()
             pyplot.plot([i*self._loss_rec_steps for i in range(len(self.loss_hist))], self.loss_hist)
             pyplot.ylabel("Loss Value")
-            pyplot.xlabel("Iteration")
-            pyplot.title("Loss over Iterations")
+            pyplot.xlabel("epochs")
+            pyplot.title("Loss over epochs")
 
         
         return
