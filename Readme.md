@@ -39,3 +39,6 @@ The performance for the general approach though, is not as accaptable in compari
 \
 \
 If you are more experienced in this topic or have an idea you think can enhance the performance I would appreciate you sharing it with me.
+\
+\
+Also view my Feedforward Neural Network performance on the same dataset [here](https://github.com/sadra-f/FNN_keyword?tab=readme-ov-file#results).
