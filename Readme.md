@@ -29,7 +29,7 @@ The performance for the general approach though, is not as accaptable in compari
 - Cosine Similarity for **ground truth and KeyBERT** keywords :  **0.605**
 - Cosine Similarity for **Custom and ground truth** keywords :  **0.129**
 
-## Workflow
+## Workflow Diagrams
 [Dataset Generation (not in this project)](./LRKWE_DSG.png)
 
 [Logistic Regression model training](./LRKWE_LRMT.png)
